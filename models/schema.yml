@@ -1,0 +1,85 @@
+version: 2
+
+sources:
+  - name: external_raw
+    schema: glue_catalog_schema   # your external schema in Glue/Athena
+    database: your_glue_db
+    tables:
+      - name: raw_hits
+      - name: raw_visits
+      - name: raw_impressions
+
+models:
+  - name: raw/raw_hits
+    description: "Raw hits data from external S3 partitioned via Glue/Athena"
+    columns:
+      - name: hit_id
+        description: "Unique hit identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: raw/raw_visits
+    description: "Raw visits data from external source"
+    columns:
+      - name: visit_id
+        description: "Unique visit identifier"
+        tests:
+          - not_null
+          - unique
+  
+  - name: raw/raw_impressions
+    description: "Raw impressions data"
+    columns:
+      - name: impression_id
+        description: "Unique impression identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: syndicated/synced_hits
+    description: "Cleaned, deduplicated hits data"
+    columns:
+      - name: hit_id
+        description: "Unique hit ID after cleanup"
+        tests:
+          - not_null
+          - unique
+  - name: syndicated/synced_visits
+    description: "Cleaned, deduplicated visits data"
+    columns:
+      - name: visit_id
+        description: "Unique visit ID after cleanup"
+        tests:
+          - not_null
+          - unique
+  - name: syndicated/synced_impressions
+    description: "Cleaned, deduplicated impressions"
+    columns:
+      - name: impression_id
+        description: "Unique impression ID"
+        tests:
+          - not_null
+          - unique
+
+  - name: curated/daily_hits_impressions
+    description: "Daily aggregated hits and impressions"
+    columns:
+      - name: date
+        description: "Date for aggregation"
+        tests:
+          - not_null
+      - name: total_hits
+        description: "Total hits for the day"
+      - name: total_impressions
+        description: "Total impressions for the day"
+
+  - name: curated/user_segments
+    description: "User segmentation based on hit counts"
+    columns:
+      - name: user_id
+        description: "User ID"
+        tests:
+          - not_null
+      - name: segment
+        description: "User segment (High, Medium, Low)"
