@@ -1,0 +1,48 @@
+version: 2
+
+# Tests for your models
+models:
+  - name: daily_hits_impressions
+    description: "Aggregate daily hits and impressions"
+    columns:
+      - name: date
+        description: "Date of the record"
+        tests:
+          - not_null
+      - name: total_hits
+        description: "Total hits for the day"
+        tests:
+          - not_null
+          - test_greater_than_zero
+      - name: total_impressions
+        description: "Total impressions for the day"
+        tests:
+          - not_null
+          - test_greater_than_zero
+
+  - name: user_segments
+    description: "User segmentation data"
+    columns:
+      - name: user_id
+        description: "User ID"
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('raw/raw_visits')
+              field: user_id
+      - name: segment
+        description: "User engagement segment"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High', 'Medium', 'Low']
+
+# Custom test example: greater than zero
+tests:
+  - name: test_greater_than_zero
+    description: "Check that values are greater than zero"
+    test_sql: |
+      select *
+      from {{ model }}
+      where {{ column }} <= 0

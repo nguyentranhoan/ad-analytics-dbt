@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: syndicated/synced_hits
+    columns:
+      - name: hit_id
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        tests:
+          - not_null
+  - name: syndicated/synced_visits
+    columns:
+      - name: visit_id
+        tests:
+          - not_null
+  - name: syndicated/synced_impressions
+    columns:
+      - name: impression_id
+        tests:
+          - not_null

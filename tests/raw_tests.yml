@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: raw/raw_hits
+    columns:
+      - name: hit_id
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        tests:
+          - not_null
+  - name: raw/raw_visits
+    columns:
+      - name: visit_id
+        tests:
+          - not_null
+  - name: raw/raw_impressions
+    columns:
+      - name: impression_id
+        tests:
+          - not_null
