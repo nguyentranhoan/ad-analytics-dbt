@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: curated/daily_hits_impressions
+    columns:
+      - name: date
+        tests:
+          - not_null
+      - name: total_hits
+        tests:
+          - not_null
+          - test_greater_than_zero
+      - name: total_impressions
+        tests:
+          - not_null
+          - test_greater_than_zero
+  - name: curated/user_segments
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('raw/raw_visits')
+              field: user_id
+      - name: segment
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['High', 'Medium', 'Low']
